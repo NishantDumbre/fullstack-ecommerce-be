@@ -1,23 +1,21 @@
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt'
-import { GenerateTokenHelperInterface, ComparePasswordHelperInterface } from "../Interfaces/helper";
+import { GenerateTokenHelperInterface, ComparePasswordHelperInterface, DecodeTokenInterface } from "../Interfaces/helper";
 
 
-export const generateToken = ({fetchedId, email}: GenerateTokenHelperInterface) => {
-    return jwt.sign({ fetchedId, email }, process.env.TOKEN_SECRET_KEY as string)
+export const generateToken = ({userId, email}: GenerateTokenHelperInterface) => {
+    return jwt.sign({ userId, email }, process.env.TOKEN_SECRET_KEY as string)
 }
 
 
-export const decodeToken = (token:string) => {
-    const verifiedData = jwt.verify(token, process.env.TOKEN_SECRET_KEY as string, (error, decoded) => {
-        if (error) {
-            return null
-        } else {
-            return decoded;
-        }
-    });
-
-    return verifiedData;
+export const decodeToken = (token: string): DecodeTokenInterface | null => {
+    try {
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET_KEY as string) as DecodeTokenInterface;
+        return decoded;
+    } catch (error) {
+        console.error("Token verification failed:", error);
+        return null;
+    }
 };
 
 

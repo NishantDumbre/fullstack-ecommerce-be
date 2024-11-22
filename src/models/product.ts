@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
 import Sequelize from "../config/server";
+import { DataTypes } from "sequelize";
 
-const User = Sequelize.define("user", {
+const Product = Sequelize.define("product", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -10,16 +10,21 @@ const User = Sequelize.define("user", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
     unique: true,
   },
-  password: {
+  price: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0
+  },
+  desc:{
     type: DataTypes.STRING,
     allowNull: false,
   },
+  imageURLs:{
+    type:DataTypes.STRING,
+    allowNull: false
+  }
 });
 
-export default User;
+export default Product

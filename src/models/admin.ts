@@ -1,5 +1,5 @@
 import Sequelize from "../config/server";
-import { STRING, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
 const Admin = Sequelize.define("admin", {
   id: {
@@ -8,12 +8,12 @@ const Admin = Sequelize.define("admin", {
     primaryKey: true,
   },
   email: {
-    type: STRING,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
   password: {
-    type: STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });

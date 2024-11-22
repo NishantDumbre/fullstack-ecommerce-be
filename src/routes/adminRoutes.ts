@@ -1,6 +1,5 @@
 import express from "express";
-import { signupAdmin, loginAdmin } from "../controllers/admin";
-// import { loginUser, signupUser, checkUser, logoutUser } from "../controllers/user";
+import { signupAdmin, loginAdmin, logoutAdmin } from "../controllers/admin";
 import { authentication } from "../middlewares/authentication";
 
 const adminRouter = express.Router();
@@ -9,9 +8,8 @@ const adminRouter = express.Router();
 adminRouter.post("/signup", signupAdmin);
 // @ts-ignore
 adminRouter.post("/login", loginAdmin);
-// // @ts-ignore
-// userRouter.get("/check", authentication, checkUser);
-// // @ts-ignore
-// userRouter.get('/logout', authentication, logoutUser)
+// @ts-ignore
+adminRouter.get("/logout", authentication, logoutAdmin);
+
 
 export default adminRouter;

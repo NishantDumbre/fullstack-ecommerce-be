@@ -1,16 +1,9 @@
 import jwt from "jsonwebtoken";
-import User from "../models/admin";
-import { Response, Request, NextFunction, RequestHandler } from "express";
+import Admin from "../models/admin";
+import { Response, Request, NextFunction } from "express";
 import { DecodedToken } from "../utils/Interfaces/auth";
-import { UserModelInterface } from "../utils/Interfaces/models";
+import { decodeToken } from "../utils/functions/helperFunctions";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: UserModelInterface;
-    }
-  }
-}
 
 export const authentication = async (
   req: Request,
@@ -23,17 +16,23 @@ export const authentication = async (
     return;
   }
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET_KEY as string
-    ) as DecodedToken;
+    console.log('token', token)
+    const decoded = decodeToken(token)
+    if(!decoded){
+      console.log('decoded', decoded)
+      throw new Error  
+    }
 
-    const foundUser = await User.findOne({ email: decoded?.email });
+    const foundUser = await Admin.findOne({where:{email:decoded.email}, attributes:['id', 'email']});
+    console.log(foundUser)
     // @ts-ignore
-    req.user = foundUser;
+    req.user = foundUser?.dataValues;
+    // @ts-ignore
+    console.log(req.user)
     console.log('Authenticated')
     next();
-  } catch (error) {
+  } catch (error:any) {
+    console.log(error.message)
     res.status(404).json({ message: "Invalid token" });
   }
 };

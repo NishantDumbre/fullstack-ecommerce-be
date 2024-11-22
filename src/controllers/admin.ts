@@ -78,7 +78,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
   }
 
   const fetchedId = admin?.dataValues?.id;
-  const token = generateToken({ fetchedId, email });
+  const token = generateToken({ userId: fetchedId, email });
 
   res.cookie("auth_token", token, {
     httpOnly: true,
@@ -93,3 +93,10 @@ export const loginAdmin = async (req: Request, res: Response) => {
     admin: { id: fetchedId, email: email },
   });
 };
+
+
+export const logoutAdmin = (req:Request, res:Response) =>{
+    console.log('Logged out')
+    res.clearCookie('auth_token', { httpOnly: true, path: '/' })
+    res.status(200).json({message:'Logged out successfully'})
+  }
